@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oops! Not Found!</title>
+    <style>
+        @font-face {
+            font-family: "Concert";
+            src: url(/static/ConcertOne-Regular.ttf);
+        }
+
+        /* Define two columns with a width of 50% each */
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        
+        /* Style for the left column */
+        .left-column {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Style for the right column */
+        .right-column {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Style for the image */
+        img {
+            max-width: 50%;
+            height: auto;
+        }
+        .title {
+            font-size: 500%;
+        }
+        .message {
+            font-size: 300%;
+            text-align: center;
+        }
+        p, h1 {
+            font-family: Concert;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-column">
+            <img src="https://mfiles.alphacoders.com/991/991948.jpg">
+        </div>
+        <div class="right-column">
+            <h1 class="title">Page not found!</h1>
+            {{ if .message }}
+                <p class="message">{{ .message }}</p>
+            {{ else }}
+                <p class="message">The page you search wasn't found! Please, try again!</p>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>
