@@ -11,7 +11,7 @@ func serve() {
 	r.LoadHTMLGlob("template/*")
 	r.Static("/static", "./static/fonts")
 	r.GET("/", getUserCounter)
-	r.Run()
+	r.Run("0.0.0.0:80")
 }
 
 func getUserCounter(c *gin.Context) {
