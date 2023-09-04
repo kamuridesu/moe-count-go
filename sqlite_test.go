@@ -60,9 +60,9 @@ func TestInsertUserIntoDB_OneUser(t *testing.T) {
 		t.Errorf("Expected no error, got %v", err)
 	}
 
-	expectedUser := User{"test", 0}
+	expectedUser := User{username: "test", counter: 0}
 
-	if !user.equals(&expectedUser) {
+	if !user.Equals(&expectedUser) {
 		t.Errorf("Expected %v, got %v", expectedUser, user)
 	}
 }
@@ -76,7 +76,7 @@ func TestUpdateUserViewCount(t *testing.T) {
 	db, _ := StartDB(dbFileName)
 	defer db.Close()
 
-	user := User{"test", 0}
+	user := User{username: "test", counter: 0}
 
 	err := updateUserViewCount(db, user)
 
@@ -102,7 +102,7 @@ func TestSearchForUser(t *testing.T) {
 		t.Errorf("Expected for no error, got %v", err)
 	}
 
-	if !user.equals(&expectedUser) {
+	if !user.Equals(&expectedUser) {
 		t.Errorf("Expected %v, got %v", expectedUser, user)
 	}
 }

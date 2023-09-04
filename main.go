@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-const BASEPATH = "static/images"
+const imageBasePath = "static/images"
 
-var DB *sql.DB
+var mainDatabase *sql.DB
 var IMAGES *[][]byte
 var DBFILE string
 
@@ -23,12 +23,12 @@ func init() {
 
 	var err error
 	fmt.Println(DBFILE)
-	DB, err = StartDB(DBFILE)
+	mainDatabase, err = StartDB(DBFILE)
 	if err != nil {
 		panic(err)
 	}
 
-	IMAGES, err = LoadAllImages(BASEPATH)
+	IMAGES, err = LoadAllImages(imageBasePath)
 	if err != nil {
 		panic(err)
 	}
@@ -36,5 +36,5 @@ func init() {
 
 func main() {
 	serve()
-	defer DB.Close()
+	defer mainDatabase.Close()
 }

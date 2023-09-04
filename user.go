@@ -5,7 +5,7 @@ type User struct {
 	counter  int
 }
 
-func (u *User) equals(user *User) bool {
+func (u *User) Equals(user *User) bool {
 	if (*u).username == (*user).username &&
 		(*u).counter == (*user).counter {
 		return true
