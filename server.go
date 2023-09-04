@@ -11,6 +11,11 @@ func serve() {
 	r.LoadHTMLGlob("template/*")
 	r.Static("/static", "./static/fonts")
 	r.GET("/", getUserCounter)
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
 	r.Run("0.0.0.0:80")
 }
 
