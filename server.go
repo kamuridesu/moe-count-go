@@ -41,7 +41,7 @@ func getUserCounter(c *gin.Context) {
 			}
 		}
 		if err == nil {
-			c.Data(200, "text/html; charset=utf-8", generateSVG(user.counter, IMAGES).Bytes())
+			c.Data(200, "image/svg+xml", generateSVG(user.counter, IMAGES).Bytes())
 			updateUserViewCount(mainDatabase, user)
 		}
 	}
