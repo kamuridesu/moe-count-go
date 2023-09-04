@@ -2,8 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"flag"
 	"fmt"
+	"os"
+	"strings"
 )
 
 const imageBasePath = "static/images"
@@ -13,9 +14,12 @@ var loadedImages *[][]byte
 var dbFile string
 
 func argparse() {
-	fileNamePtr := flag.String("dbfile", "./db/users.db", "database filelame with path")
-	flag.Parse()
-	dbFile = *fileNamePtr
+	dbFile = "./db/users.db"
+	for _, arg := range os.Args {
+		if strings.Contains(arg, "-dbfile") {
+			dbFile = strings.Split(arg, "=")[1]
+		}
+	}
 }
 
 func init() {
