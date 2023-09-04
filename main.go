@@ -9,26 +9,26 @@ import (
 const imageBasePath = "static/images"
 
 var mainDatabase *sql.DB
-var IMAGES *[][]byte
-var DBFILE string
+var loadedImages *[][]byte
+var dbFile string
 
 func argparse() {
 	fileNamePtr := flag.String("dbfile", "./db/users.db", "database filelame with path")
 	flag.Parse()
-	DBFILE = *fileNamePtr
+	dbFile = *fileNamePtr
 }
 
 func init() {
 	argparse()
 
 	var err error
-	fmt.Println(DBFILE)
-	mainDatabase, err = StartDB(DBFILE)
+	fmt.Println(dbFile)
+	mainDatabase, err = StartDB(dbFile)
 	if err != nil {
 		panic(err)
 	}
 
-	IMAGES, err = LoadAllImages(imageBasePath)
+	loadedImages, err = LoadAllImages(imageBasePath)
 	if err != nil {
 		panic(err)
 	}

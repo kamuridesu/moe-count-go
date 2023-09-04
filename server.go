@@ -16,7 +16,7 @@ func serve() {
 			"status": "ok",
 		})
 	})
-	r.Run("0.0.0.0:80")
+	r.Run("0.0.0.0:8080")
 }
 
 func getUserCounter(c *gin.Context) {
@@ -24,9 +24,6 @@ func getUserCounter(c *gin.Context) {
 	var user User
 	var err error
 	if username == "" {
-		// c.JSON(404, gin.H{
-		// 	"message": "Error! Missing username param",
-		// })
 		c.HTML(http.StatusOK, "404.tmpl", gin.H{
 			"message": "Error! Missing username param",
 		})
@@ -41,7 +38,11 @@ func getUserCounter(c *gin.Context) {
 			}
 		}
 		if err == nil {
-			c.Data(200, "image/svg+xml", generateSVG(user.counter, IMAGES).Bytes())
+			c.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+			c.Header("Vary", "Accept-Encoding")
+			c.Header("Pragma", "no-cache")
+			c.Header("Expires", "0")
+			c.Data(200, "image/svg+xml", generateSVG(user.counter, loadedImages).Bytes())
 			updateUserViewCount(mainDatabase, user)
 		}
 	}

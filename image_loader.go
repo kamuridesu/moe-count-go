@@ -11,14 +11,14 @@ import (
 func LoadAllImages(basePath string) (*[][]byte, error) {
 	files, e := os.ReadDir(basePath)
 	if e != nil {
-		log.Print(fmt.Sprintf("Error! Could not read files from dir %s!", basePath))
+		log.Printf("Error! Could not read files from dir %s!", basePath)
 		return nil, e
 	}
 	var contents [][]byte
 	for _, file := range files {
 		content, err := os.ReadFile(filepath.Join(basePath, file.Name()))
 		if err != nil {
-			log.Print(fmt.Sprintf("Error! Could not read some file from dir, %e", err))
+			log.Printf("Error! Could not read some file from dir, %e", err)
 		}
 		contents = append(contents, content)
 	}

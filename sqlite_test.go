@@ -14,11 +14,11 @@ func TestStartDB_CheckIfDBIsCreated(t *testing.T) {
 	dbFileName := filepath.Join(basePath, "test.db")
 
 	db, err := StartDB(dbFileName)
-	defer db.Close()
-
 	if err != nil {
 		t.Errorf("Expected for no error, got %v", err)
 	}
+
+	defer db.Close()
 
 	if _, err := os.Stat(dbFileName); errors.Is(err, os.ErrNotExist) {
 		t.Errorf("Expected file to be created!")

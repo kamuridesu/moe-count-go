@@ -78,7 +78,7 @@ func executeQuery(db *sql.DB, query string, params ...string) error {
 func insertUserIntoDB(db *sql.DB, username string) (User, error) {
 	var user User
 	if username == "" {
-		return user, fmt.Errorf("Error! Missing username!")
+		return user, fmt.Errorf("error! Missing username")
 	}
 	err := executeQuery(db, `INSERT INTO "users" (username, count) VALUES (?, ?)`, username, "0")
 	if err != nil {
@@ -124,7 +124,7 @@ func searchForUser(db *sql.DB, username string) (User, error) {
 	}
 
 	if user.username == "" {
-		return user, fmt.Errorf(`Error! User "%s" not found!`, username)
+		return user, fmt.Errorf(`error! User "%s" not found`, username)
 	}
 
 	return user, nil
