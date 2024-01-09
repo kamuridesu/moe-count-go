@@ -28,9 +28,9 @@ func getUserCounter(c *gin.Context) {
 			"message": "Error! Missing username param",
 		})
 	} else {
-		user, err = searchForUser(mainDatabase, username)
+		user, err = mainDatabase.searchForUser(username)
 		if err != nil {
-			user, err = insertUserIntoDB(mainDatabase, username)
+			user, err = mainDatabase.insertUserIntoDB(username)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
 					"message": err.Error(),
@@ -43,7 +43,7 @@ func getUserCounter(c *gin.Context) {
 			c.Header("Pragma", "no-cache")
 			c.Header("Expires", "0")
 			c.Data(200, "image/svg+xml", generateSVG(user.counter, loadedImages).Bytes())
-			updateUserViewCount(mainDatabase, user)
+			mainDatabase.updateUserViewCount(user)
 		}
 	}
 

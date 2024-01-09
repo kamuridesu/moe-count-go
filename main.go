@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 	"strings"
@@ -9,7 +8,7 @@ import (
 
 const imageBasePath = "static/images"
 
-var mainDatabase *sql.DB
+var mainDatabase *Database
 var loadedImages *[][]byte
 var dbFile string
 
@@ -27,7 +26,7 @@ func init() {
 
 	var err error
 	fmt.Println(dbFile)
-	mainDatabase, err = StartDB(dbFile)
+	mainDatabase, err = StartDB("sqlite3", dbFile)
 	if err != nil {
 		panic(err)
 	}
