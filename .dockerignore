@@ -26,3 +26,5 @@ db
 Dockerfile
 .gitignore
 .dockerignore
+data/*
+docke-compose.yml

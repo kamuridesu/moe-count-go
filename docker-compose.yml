@@ -1,6 +1,21 @@
 version: "3"
 services:
 
+  count:
+    build: .
+    restart: always
+    container_name: moe_count
+    ports:
+      - 8085:8080
+    volumes:
+      - ./data/count:/app/users.db
+    networks:
+      infra_network:
+        aliases:
+          - infra_network
+    command: ["-dbname=postgres", "-dbuser=postgres", "-dbpassword=SomeSecurePassword","-dbhost=db", "-dbport=5432"]
+
+
   db:
     image: postgres:10
     restart: always

@@ -24,7 +24,7 @@ func getUserCounter(c *gin.Context) {
 	var user User
 	var err error
 	if username == "" {
-		c.HTML(http.StatusOK, "404.tmpl", gin.H{
+		c.HTML(http.StatusBadRequest, "404.tmpl", gin.H{
 			"message": "Error! Missing username param",
 		})
 	} else {
