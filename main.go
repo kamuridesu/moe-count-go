@@ -16,8 +16,20 @@ func getCliArgument(arg string) string {
 	return strings.Split(arg, "=")[1]
 }
 
+func envParse() string {
+	database := os.Getenv("DATABASE")
+	username := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASS")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	if host != "" {
+		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, username, password, database)
+	}
+	return ""
+}
+
 func argparse() {
-	dbParams = "./db/users.db"
+	dbParams = "/app/users.db"
 	database := ""
 	username := ""
 	password := ""
@@ -25,7 +37,7 @@ func argparse() {
 	dbPort := ""
 	for _, arg := range os.Args {
 		if strings.Contains(arg, "-version") {
-			fmt.Println("0.0.1")
+			fmt.Println("0.0.2")
 			os.Exit(0)
 		} else if strings.Contains(arg, "-dbfile") {
 			dbParams = getCliArgument(arg)
@@ -44,11 +56,19 @@ func argparse() {
 	if dbHost != "" {
 		dbParams = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, username, password, database)
 	}
+
+	configFromEnvVar := envParse()
+	if configFromEnvVar != "" {
+		dbParams = configFromEnvVar
+	}
+
+	if dbParams == "" {
+		panic("No database set!")
+	}
 }
 
 func init() {
 	argparse()
-
 	var err error
 	if strings.Contains(dbParams, "host") {
 		mainDatabase, err = StartDB("postgres", dbParams)
@@ -69,6 +89,7 @@ func init() {
 }
 
 func main() {
+	fmt.Println("Server is starting")
 	serve()
 	defer mainDatabase.Close()
 }

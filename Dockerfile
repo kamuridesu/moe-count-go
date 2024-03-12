@@ -8,9 +8,8 @@ RUN apk add --no-cache \
 
 WORKDIR /workspace
 
-COPY ./go.mod .
-COPY ./go.sum .
-RUN go mod tidy
+COPY go.mod go.sum ./
+RUN go mod download
 
 COPY . /workspace/
 RUN go build -ldflags='-s -w -extldflags "-static"' -o "moe-count"
@@ -24,4 +23,3 @@ COPY ./static /app/static
 COPY ./template /app/template
 
 ENTRYPOINT [ "moe-count" ]
-
