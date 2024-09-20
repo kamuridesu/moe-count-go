@@ -97,7 +97,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	responseWriter := NewResponseWriter(&w, r)
 	var headers map[string]string
 
-	if r.URL.String() != "/" {
+	if r.URL.Path != "/" {
 		headers = map[string]string{
 			"content-type": "text/html",
 		}

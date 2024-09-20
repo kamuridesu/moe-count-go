@@ -37,7 +37,7 @@ func argparse() {
 	dbPort := ""
 	for _, arg := range os.Args {
 		if strings.Contains(arg, "-version") {
-			fmt.Println("0.0.2")
+			fmt.Println("0.0.7")
 			os.Exit(0)
 		} else if strings.Contains(arg, "-dbfile") {
 			dbParams = getCliArgument(arg)
