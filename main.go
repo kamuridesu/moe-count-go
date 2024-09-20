@@ -88,8 +88,8 @@ func init() {
 	}
 }
 
-func main() {
-	fmt.Println("Server is starting")
-	serve()
-	defer mainDatabase.Close()
-}
+// func main() {
+// 	fmt.Println("Server is starting")
+// 	serve()
+// 	defer mainDatabase.Close()
+// }
