@@ -95,9 +95,18 @@ func (r *ResponseWriter) Send() {
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	responseWriter := NewResponseWriter(&w, r)
-	hasUsername := r.URL.Query().Has("username")
 	var headers map[string]string
 
+	if r.URL.String() != "/" {
+		headers = map[string]string{
+			"content-type": "text/html",
+		}
+		notFound, _ := parseTemplate("404.tmpl", map[string]interface{}{"message": "Error! Page not found"})
+		responseWriter.BuildAndSend(notFound, http.StatusNotFound, headers)
+		return
+	}
+
+	hasUsername := r.URL.Query().Has("username")
 	if !hasUsername {
 		headers = map[string]string{
 			"x-missing-field": "username",
@@ -143,7 +152,7 @@ func healthCheck(w http.ResponseWriter, r *http.Request) {
 func serve() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandler)
-	mux.HandleFunc("/health", healthCheck)
+	mux.HandleFunc("/health/", healthCheck)
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/fonts"))))
 
 	slog.Info("Listening on 0.0.0.0:8080")

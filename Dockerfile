@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine as build
+FROM golang:1.21-alpine AS build
 ENV CGO_ENABLED=1
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 
@@ -14,7 +14,7 @@ RUN go mod download
 COPY . /workspace/
 RUN go build -ldflags='-s -w -extldflags "-static"' -o "moe-count"
 
-FROM scratch as deploy
+FROM scratch AS deploy
 ENV GIN_MODE=release
 
 WORKDIR /app/
