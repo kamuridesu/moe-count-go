@@ -4,24 +4,20 @@ import (
 	"bytes"
 	"fmt"
 	"strings"
-
-	svg "github.com/ajstarks/svgo"
 )
 
-func MergeSvgFiles(selectedImages *[][]byte) *bytes.Buffer {
+const (
+	SVG_HEADER_TEMPLATE = `<svg width="270" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">%s</svg>`
+	G_HEADER_TEMPLATE   = `<g xmlns="http://www.w3.org/2000/svg" id="id%d:id%d" transform="translate(%d.0,0.0)">%s</g>`
+)
+
+func MergeSvgFiles(selectedImages *[][]byte) string {
 	buffer := bytes.Buffer{}
-	canvas := svg.New(&buffer)
-	canvas.Start(270.0, 100.0)
-	xCoord := 0
 	for index, image := range *selectedImages {
-		imageWithoutTags := RemoveTagsFromImage(string(image))
-		canvas.Writer.Write([]byte(fmt.Sprintf("<g xmlns=\"http://www.w3.org/2000/svg\" id=\"id%d:id%d\" transform=\"translate(%d.0,0.0)\">", index, index, xCoord)))
-		canvas.Writer.Write([]byte(imageWithoutTags))
-		canvas.Writer.Write([]byte("</g>\r\n"))
-		xCoord += 45
+		buffer.WriteString(fmt.Sprintf(G_HEADER_TEMPLATE, index, index, index*45, RemoveTagsFromImage(string(image))))
 	}
-	canvas.End()
-	return &buffer
+	newFile := fmt.Sprintf(SVG_HEADER_TEMPLATE, buffer.String())
+	return newFile
 }
 
 func RemoveTagsFromImage(svg string) string {
@@ -39,7 +35,7 @@ func RemoveTagsFromImage(svg string) string {
 	return __svg
 }
 
-func generateSVG(number int, images *[][]byte) *bytes.Buffer {
+func generateSVG(number int, images *[][]byte) string {
 	selectedImages, err := SelectImagesForRepr(number, images)
 	if err != nil {
 		panic(err)

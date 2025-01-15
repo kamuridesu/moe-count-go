@@ -8,7 +8,7 @@ import (
 
 const imageBasePath = "static/images"
 
-var mainDatabase *Database
+var mainDatabase Database
 var loadedImages *[][]byte
 var dbParams string
 
@@ -67,16 +67,16 @@ func argparse() {
 	}
 }
 
-func init() {
+func main() {
 	argparse()
 	var err error
 	if strings.Contains(dbParams, "host") {
-		mainDatabase, err = StartDB("postgres", dbParams)
+		mainDatabase, err = NewDatabase(postgres, dbParams)
 		if err != nil {
 			panic(err)
 		}
 	} else {
-		mainDatabase, err = StartDB("sqlite3", dbParams)
+		mainDatabase, err = NewDatabase(sqlite, dbParams)
 		if err != nil {
 			panic(err)
 		}
@@ -86,10 +86,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func main() {
 	fmt.Println("Server is starting")
 	serve()
-	defer mainDatabase.Close()
+	defer mainDatabase.close()
 }

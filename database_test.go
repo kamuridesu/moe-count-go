@@ -13,12 +13,12 @@ func TestStartDB_CheckIfDBIsCreated(t *testing.T) {
 	os.Mkdir(basePath, 0755)
 	dbFileName := filepath.Join(basePath, "test.db")
 
-	db, err := StartDB("sqlite3", dbFileName)
+	db, err := NewDatabase(sqlite, dbFileName)
 	if err != nil {
 		t.Errorf("Expected for no error, got %v", err)
 	}
 
-	defer db.Close()
+	defer db.close()
 
 	if _, err := os.Stat(dbFileName); errors.Is(err, os.ErrNotExist) {
 		t.Errorf("Expected file to be created!")
@@ -31,8 +31,8 @@ func TestInsertUserIntoDB_EmptyUsername(t *testing.T) {
 	os.Mkdir(basePath, 0755)
 	dbFileName := filepath.Join(basePath, "test.db")
 
-	db, _ := StartDB("sqlite3", dbFileName)
-	defer db.Close()
+	db, _ := NewDatabase(sqlite, dbFileName)
+	defer db.close()
 
 	username := ""
 
@@ -49,8 +49,8 @@ func TestInsertUserIntoDB_OneUser(t *testing.T) {
 	os.Mkdir(basePath, 0755)
 	dbFileName := filepath.Join(basePath, "test.db")
 
-	db, _ := StartDB("sqlite3", dbFileName)
-	defer db.Close()
+	db, _ := NewDatabase(sqlite, dbFileName)
+	defer db.close()
 
 	username := "test"
 
@@ -73,10 +73,10 @@ func TestUpdateUserViewCount(t *testing.T) {
 	os.Mkdir(basePath, 0755)
 	dbFileName := filepath.Join(basePath, "test.db")
 
-	db, _ := StartDB("sqlite3", dbFileName)
-	defer db.Close()
+	db, _ := NewDatabase(sqlite, dbFileName)
+	defer db.close()
 
-	user := User{username: "test", counter: 0}
+	user := &User{username: "test", counter: 0}
 
 	err := db.updateUserViewCount(user)
 
@@ -91,8 +91,8 @@ func TestSearchForUser(t *testing.T) {
 	os.Mkdir(basePath, 0755)
 	dbFileName := filepath.Join(basePath, "test.db")
 
-	db, _ := StartDB("sqlite3", dbFileName)
-	defer db.Close()
+	db, _ := NewDatabase(sqlite, dbFileName)
+	defer db.close()
 
 	expectedUser, _ := db.insertUserIntoDB("test")
 
@@ -102,7 +102,7 @@ func TestSearchForUser(t *testing.T) {
 		t.Errorf("Expected for no error, got %v", err)
 	}
 
-	if !user.Equals(&expectedUser) {
+	if !user.Equals(expectedUser) {
 		t.Errorf("Expected %v, got %v", expectedUser, user)
 	}
 }
@@ -113,8 +113,8 @@ func TestSearchForUser_EmptyUsername(t *testing.T) {
 	os.Mkdir(basePath, 0755)
 	dbFileName := filepath.Join(basePath, "test.db")
 
-	db, _ := StartDB("sqlite3", dbFileName)
-	defer db.Close()
+	db, _ := NewDatabase(sqlite, dbFileName)
+	defer db.close()
 
 	_, err := db.searchForUser("")
 

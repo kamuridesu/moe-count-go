@@ -13,13 +13,13 @@ services:
       infra_network:
         aliases:
           - infra_network
-    # environment:
-      # DATABASE: postgres
-      # DB_USER: postgres
-      # DB_PASS: SomeSecurePassword
-      # DB_HOST: db
-      # DB_PORT: 5432
-    # command: ["-dbname=postgres", "-dbuser=postgres", "-dbpassword=SomeSecurePassword","-dbhost=db", "-dbport=5432"]
+    environment:
+      DATABASE: postgres
+      DB_USER: postgres
+      DB_PASS: SomeSecurePassword
+      DB_HOST: db
+      DB_PORT: 5432
+    command: ["-dbname=postgres", "-dbuser=postgres", "-dbpassword=SomeSecurePassword","-dbhost=db", "-dbport=5432"]
 
 
   db:

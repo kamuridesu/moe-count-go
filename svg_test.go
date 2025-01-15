@@ -11,8 +11,8 @@ func TestMergeSvgFiles_EmptyImagesList(t *testing.T) {
 
 	buffer := MergeSvgFiles(&selectedImages)
 
-	if len(buffer.Bytes()) != 175 {
-		t.Errorf("Expected default 175 bytes buffer, got %d bytes", len(buffer.Bytes()))
+	if len(buffer) != 114 {
+		t.Errorf("Expected default 114 len str, got %d", len(buffer))
 	}
 }
 
@@ -22,23 +22,27 @@ func TestMergeSvgFiles_OneImage(t *testing.T) {
 
 	buffer := MergeSvgFiles(&selectedImages)
 
-	if len(buffer.Bytes()) != 270 {
-		t.Errorf("Expected default 270 bytes buffer, got %d bytes", len(buffer.Bytes()))
+	if len(buffer) != 207 {
+		t.Errorf("Expected default 207 len str, got %d", len(buffer))
 	}
 }
 
 func TestMergeSvgFiles_MultipleImages(t *testing.T) {
-	// Arrange
 	images := imagesListBuilder(3)
-
-	// Act
 	buffer := MergeSvgFiles(&images)
-	x := 0
 	for index := range images {
-		expected := fmt.Sprintf(`<g xmlns="http://www.w3.org/2000/svg" id="id%d:id%d" transform="translate(%d.0,0.0)">image%d.svg`, index, index, x, index)
-		if !strings.Contains(buffer.String(), expected) {
-			t.Errorf("Expected %s got %s", expected, buffer.String())
+		expected := fmt.Sprintf(`<g xmlns="http://www.w3.org/2000/svg" id="id%d:id%d" transform="translate(%d.0,0.0)">image%d.svg`, index, index, index*45, index)
+		if !strings.Contains(buffer, expected) {
+			t.Errorf("Expected %s got %s", expected, buffer)
 		}
-		x += 45
+	}
+}
+
+func TestGenerateSVG(t *testing.T) {
+	counter := 3
+	images := imagesListBuilder(3)
+	buffer := generateSVG(counter, &images)
+	if len(buffer) != 710 {
+		t.Errorf("Expected default 710 len str, got %d", len(buffer))
 	}
 }

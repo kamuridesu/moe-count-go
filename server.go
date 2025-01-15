@@ -24,7 +24,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 			"content-type": "text/html",
 		}
 		notFound := Templates.LoadHTML("404.tmpl", map[string]interface{}{"message": "Error! Page not found"})
-		responseWriter.BuildAndSend(http.StatusNotFound, notFound, headers)
+		responseWriter.SetHeaders(headers).Build(http.StatusNotFound, notFound).Send()
 		return
 	}
 
@@ -35,12 +35,12 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 			"content-type":    "text/html",
 		}
 		notFound := Templates.LoadHTML("404.tmpl", map[string]interface{}{"message": "Error! Page not found"})
-		responseWriter.BuildAndSend(http.StatusBadRequest, notFound, headers)
+		responseWriter.SetHeaders(headers).Build(http.StatusBadRequest, notFound).Send()
 		return
 	}
 
 	username := r.URL.Query().Get("username")
-	var user User
+	var user *User
 	var err error
 
 	user, err = mainDatabase.searchForUser(username)
@@ -62,12 +62,12 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		"content-type":  "image/svg+xml",
 	}
 	mainDatabase.updateUserViewCount(user)
-	responseWriter.BuildAndSend(http.StatusOK, generateSVG(user.counter, loadedImages).String(), headers)
+	responseWriter.SetHeaders(headers).Build(http.StatusOK, generateSVG(user.counter, loadedImages)).Send()
 }
 
 func healthCheck(w http.ResponseWriter, r *http.Request) {
 	writer := response.New(&w, r)
-	writer.BuildAndSend(http.StatusOK, "{\"status\": \"up\"}", map[string]string{"content-type": "application/json"})
+	writer.SetHeaders(map[string]string{"content-type": "application/json"}).Build(http.StatusOK, "{\"status\": \"up\"}").Send()
 }
 
 func serve() {
