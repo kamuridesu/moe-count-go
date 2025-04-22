@@ -23,7 +23,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		headers = map[string]string{
 			"content-type": "text/html",
 		}
-		notFound := Templates.LoadHTML("404.tmpl", map[string]interface{}{"message": "Error! Page not found"})
+		notFound := Templates.LoadHTML("404.tmpl", map[string]any{"message": "Error! Page not found"})
 		responseWriter.SetHeaders(headers).Build(http.StatusNotFound, notFound).Send()
 		return
 	}
@@ -34,7 +34,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 			"x-missing-field": "username",
 			"content-type":    "text/html",
 		}
-		notFound := Templates.LoadHTML("404.tmpl", map[string]interface{}{"message": "Error! Page not found"})
+		notFound := Templates.LoadHTML("404.tmpl", map[string]any{"message": "Error! Page not found"})
 		responseWriter.SetHeaders(headers).Build(http.StatusBadRequest, notFound).Send()
 		return
 	}

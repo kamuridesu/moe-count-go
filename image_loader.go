@@ -6,7 +6,23 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
+
+func RemoveTagsFromImage(svg string) string {
+	__svg := ""
+	for _, line := range strings.Split(strings.ReplaceAll(svg, "\r\n", "\n"), "\n") {
+		if (!strings.HasPrefix(line, "<?xml")) &&
+			(!strings.HasPrefix(line, "<!DOCTYPE")) &&
+			(!strings.HasSuffix(line, ".dtd\">")) &&
+			(!strings.HasPrefix(line, "<svg")) &&
+			(!strings.HasSuffix(line, "\"1.1\">")) &&
+			(!strings.HasPrefix(line, "</svg")) {
+			__svg += line + "\r\n"
+		}
+	}
+	return __svg
+}
 
 func LoadAllImages(basePath string) (*[][]byte, error) {
 	files, e := os.ReadDir(basePath)
@@ -20,7 +36,7 @@ func LoadAllImages(basePath string) (*[][]byte, error) {
 		if err != nil {
 			log.Printf("Error! Could not read some file from dir, %e", err)
 		}
-		contents = append(contents, content)
+		contents = append(contents, []byte(RemoveTagsFromImage(string(content))))
 	}
 	return &contents, nil
 }
