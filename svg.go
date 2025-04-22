@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"strings"
 )
 
 const (
@@ -14,25 +13,10 @@ const (
 func MergeSvgFiles(selectedImages *[][]byte) string {
 	buffer := bytes.Buffer{}
 	for index, image := range *selectedImages {
-		buffer.WriteString(fmt.Sprintf(G_HEADER_TEMPLATE, index, index, index*45, RemoveTagsFromImage(string(image))))
+		buffer.WriteString(fmt.Sprintf(G_HEADER_TEMPLATE, index, index, index*45, string(image)))
 	}
 	newFile := fmt.Sprintf(SVG_HEADER_TEMPLATE, buffer.String())
 	return newFile
-}
-
-func RemoveTagsFromImage(svg string) string {
-	__svg := ""
-	for _, line := range strings.Split(strings.ReplaceAll(svg, "\r\n", "\n"), "\n") {
-		if (!strings.HasPrefix(line, "<?xml")) &&
-			(!strings.HasPrefix(line, "<!DOCTYPE")) &&
-			(!strings.HasSuffix(line, ".dtd\">")) &&
-			(!strings.HasPrefix(line, "<svg")) &&
-			(!strings.HasSuffix(line, "\"1.1\">")) &&
-			(!strings.HasPrefix(line, "</svg")) {
-			__svg += line + "\r\n"
-		}
-	}
-	return __svg
 }
 
 func generateSVG(number int, images *[][]byte) string {
