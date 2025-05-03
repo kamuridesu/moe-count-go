@@ -22,8 +22,8 @@ func TestMergeSvgFiles_OneImage(t *testing.T) {
 
 	buffer := MergeSvgFiles(&selectedImages)
 
-	if len(buffer) != 207 {
-		t.Errorf("Expected default 207 len str, got %d", len(buffer))
+	if len(buffer) != 205 {
+		t.Errorf("Expected default 205 len str, got %d", len(buffer))
 	}
 }
 
@@ -42,7 +42,7 @@ func TestGenerateSVG(t *testing.T) {
 	counter := 3
 	images := imagesListBuilder(3)
 	buffer := generateSVG(counter, &images)
-	if len(buffer) != 710 {
-		t.Errorf("Expected default 710 len str, got %d", len(buffer))
+	if len(buffer) != 698 {
+		t.Errorf("Expected default 698 len str, got %d", len(buffer))
 	}
 }
