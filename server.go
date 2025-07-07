@@ -61,8 +61,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		"Expires":       "0",
 		"content-type":  "image/svg+xml",
 	}
-	mainDatabase.updateUserViewCount(user)
 	responseWriter.SetHeaders(headers).Build(http.StatusOK, generateSVG(user.counter, loadedImages)).Send()
+	mainDatabase.updateUserViewCount(user)
 }
 
 func healthCheck(w http.ResponseWriter, r *http.Request) {
