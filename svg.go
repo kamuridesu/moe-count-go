@@ -19,11 +19,11 @@ func MergeSvgFiles(selectedImages *[][]byte) string {
 	return newFile
 }
 
-func generateSVG(number int, images *[][]byte) string {
+func generateSVG(number int, images *[][]byte) []byte {
 	selectedImages, err := SelectImagesForRepr(number, images)
 	if err != nil {
 		panic(err)
 	}
 	buffer := MergeSvgFiles(selectedImages)
-	return buffer
+	return []byte(buffer)
 }

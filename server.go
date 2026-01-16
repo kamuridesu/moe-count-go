@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/kamuridesu/gomechan/core/response"
+	"github.com/kamuridesu/gomechan/core/routes"
 	"github.com/kamuridesu/gomechan/core/templates"
 )
 
@@ -24,7 +25,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 			"content-type": "text/html",
 		}
 		notFound := Templates.LoadHTML("404.tmpl", map[string]any{"message": "Error! Page not found"})
-		responseWriter.SetHeaders(headers).Build(http.StatusNotFound, notFound).Send()
+		responseWriter.SetHeaders(headers).Build(http.StatusNotFound, []byte(notFound)).Send()
 		return
 	}
 
@@ -35,7 +36,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 			"content-type":    "text/html",
 		}
 		notFound := Templates.LoadHTML("404.tmpl", map[string]any{"message": "Error! Page not found"})
-		responseWriter.SetHeaders(headers).Build(http.StatusBadRequest, notFound).Send()
+		responseWriter.SetHeaders(headers).Build(http.StatusBadRequest, []byte(notFound)).Send()
 		return
 	}
 
@@ -47,7 +48,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		user, err = mainDatabase.insertUserIntoDB(username)
 		if err != nil {
-			responseWriter.AsJson(http.StatusInternalServerError, map[string]any{
+			responseWriter.SendAsJson(http.StatusInternalServerError, map[string]any{
 				"message": err.Error(),
 			})
 			return
@@ -65,15 +66,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	mainDatabase.updateUserViewCount(user)
 }
 
-func healthCheck(w http.ResponseWriter, r *http.Request) {
-	writer := response.New(&w, r)
-	writer.SetHeaders(map[string]string{"content-type": "application/json"}).Build(http.StatusOK, "{\"status\": \"up\"}").Send()
-}
-
 func serve() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandler)
-	mux.HandleFunc("/health/", healthCheck)
+	routes.AddHealthCheck(mux)
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/fonts"))))
 
 	slog.Info("Listening on 0.0.0.0:8080")
